@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: primary
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [trunk]
+
+jobs:
+  primary:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ------------------------------------------------------------------------
+
+      - uses: actions/checkout@v3
+
+      # ------------------------------------------------------------------------
+      # Pre-Commit
+
+      - uses: asdf-vm/actions/install@v1
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Setup pre-commit
+        run: |
+          pip install pre-commit
+          pre-commit install
+
+      - name: Cache pre-commit
+        uses: actions/cache@v3.0.1
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-pre-commit
+
+      - run: pre-commit run --all-files --verbose --show-diff-on-failure
+
+      # ------------------------------------------------------------------------
+
+      - name: asdf_plugin_test
+        uses: asdf-vm/actions/plugin-test@v1
+        with:
+          command: kubens --version
+        env:
+          LOGSH_COLOR: "true"
+          LOGSH_LEVEL: "4"
+
+      # ------------------------------------------------------------------------
+      # Semantic Release
+
+      - name: Copy package meta info to root
+        run: |
+          cp node/package* .
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: npm
+
+      - name: Install packages
+        run: npm install --no-progress --prefer-offline
+
+      - name: Semantic Release
+        id: semantic_release
+        run: npx --no-install semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ------------------------------------------------------------------------

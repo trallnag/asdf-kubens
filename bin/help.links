@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+cat << EOF
+Central plugin repo for asdf: https://github.com/asdf-vm/asdf-plugins
+Code repository of this plugin: https://github.com/trallnag/asdf-kubectx
+Kubens homepage: https://kubectx.dev
+Kubens repository on GitHub: https://github.com/ahmetb/kubectx
+EOF
