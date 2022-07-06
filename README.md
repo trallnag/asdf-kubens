@@ -1,3 +1,15 @@
+---
+
+⚠️ **IMPORTANT NOTICE** ⚠️
+
+**Repository is archived and unmaintained.** I personally don't need it anymore,
+as instead of using asdf to install kubens, I just use Homebrew. No need to
+have the ability to switch between multiple versions of kubens all the time.
+
+- <https://formulae.brew.sh/formula/kubectx>
+
+---
+
 [![primary](https://github.com/trallnag/asdf-kubens/actions/workflows/primary.yaml/badge.svg)](https://github.com/trallnag/asdf-kubens/actions/workflows/primary.yaml)
 
 # asdf-kubens
